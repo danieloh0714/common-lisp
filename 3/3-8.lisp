@@ -1,0 +1,7 @@
+(defun show-dots (el)
+  (cond ((atom el) (format t "~s" el))
+        (t (format t "(")
+           (show-dots (car el))
+           (format t " . ")
+           (show-dots (cdr el))
+           (format t ")"))))
