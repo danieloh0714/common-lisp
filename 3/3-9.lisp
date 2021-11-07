@@ -1,17 +1,20 @@
-(defun is-longer-path (path-one path-two)
-  (if (>= (length path-one) (length path-two))
-      path-one
-      path-two))
+(defun longer-list (lst-one lst-two)
+  (if (> (length lst-one) (length lst-two))
+      lst-one
+      lst-two))
 
-(defun dfs (start node end net)
-  (cond ((eql node end) (list start end))
-        ((null (longest-path node end (remove (assoc start net) net))) nil)
-        (t (cons start (longest-path node end (remove (assoc start net) net))))))
+(defun new-path (end path node net)
+  (cond ((eql node end) (cons node path))
+        ((member node path) nil)
+        (t (dfs end (cons node path) net))))
+
+(defun dfs (end curr net)
+  (do ((neighbors (cdr (assoc (car curr) net)) (cdr neighbors))
+       (longest nil (longer-list longest (new-path end curr (car neighbors) net))))
+    ((null neighbors) longest)))
 
 (defun longest-path (start end net)
-  (do ((neighbors (cdr (assoc start net)) (cdr neighbors))
-       (curr-path (if (not (eql start end))
-                       nil
-                       (list start))
-                  (is-longer-path curr-path (dfs start (car neighbors) end net))))
-    ((null neighbors) curr-path)))
+  (or (reverse (dfs end (list start) net))
+      (if (eql start end)
+          (list start)
+          nil)))
