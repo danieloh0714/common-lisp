@@ -1,0 +1,6 @@
+(defmacro n-of (n expression)
+  (let ((num (gensym)) (i (gensym)) (lst (gensym)))
+    `(do ((,num ,n)
+          (,i 0 (1+ ,i))
+          (,lst nil (cons ,expression ,lst)))
+       ((= ,i ,num) (nreverse ,lst)))))
