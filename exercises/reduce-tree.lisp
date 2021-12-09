@@ -1,0 +1,6 @@
+(defun reduce-tree (fn tree &optional (init nil))
+  (cond ((null tree) init)
+        ((atom tree) (funcall fn init tree))
+        (t (do ((rem tree (cdr rem))
+                (res init (reduce-tree fn (car rem) res)))
+             ((null rem) res)))))
