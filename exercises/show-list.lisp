@@ -1,0 +1,13 @@
+(defun show-list-el (el)
+  (cond ((null el) nil)
+        ((atom el) (format t " . ~S" el))
+        (t (format t " ")
+           (show-list (car el))
+           (show-list-el (cdr el)))))
+
+(defun show-list (el)
+  (cond ((atom el) (format t "~S" el))
+        (t (format t "[")
+           (show-list (car el))
+           (show-list-el (cdr el))
+           (format t "]"))))
