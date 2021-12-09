@@ -3,7 +3,7 @@
 
 (defun slope (x1 y1 x2 y2)
   (cond ((and (eql x1 x2) (eql y1 y2)) 'zero)
-        ((eql x1 x2) 'undefined)
+        ((eql x1 x2) 'infinity)
         (t (/ (- y2 y1) (- x2 x1)))))
 
 (defun subtract-points (x1 y1 x2 y2)
@@ -20,7 +20,7 @@
 
 (defun parallel-segments (x1 y1 x2 y2 x3 y3 x4 y4)
   (let ((k1 (slope x1 y1 x2 y2)) (k2 (slope x3 y3 x4 y4)))
-    (cond ((/= (y-intercept x1 y1 k1) (y-intercept x3 y3 k2)) nil)
+    (cond ((not (eql (y-intercept x1 y1 k1) (y-intercept x3 y3 k2))) nil)
           ((and (>= x4 x2 x3) (null k1) k2) (list x2 y2 x2 y2))
           ((and (> x1 x3) (< x2 x4)) (list x1 y1 x2 y2))
           ((and (> x3 x1) (< x4 x2)) (list x3 y3 x4 y4))
@@ -37,7 +37,7 @@
 (defun parallel-p (x1 y1 x2 y2 x3 y3 x4 y4)
   (let ((res (multiple-value-call #'parallel-segments (order-points x1 y1 x2 y2 x3 y3 x4 y4))))
     (cond ((null res) nil)
-          ((and (eql (slope x1 y1 x2 y2) 'zero) (not (eql (slope x3 y3 x4 y4) 'zero)))
+          ((and (null (slope x1 y1 x2 y2)) (not (eql (slope x3 y3 x4 y4) 'infinity)))
            (values (car res) (cadr res) (car res) (cadr res)))
           (t (values-list res)))))
 
